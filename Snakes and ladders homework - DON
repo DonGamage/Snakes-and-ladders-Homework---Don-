@@ -1,0 +1,90 @@
+import random
+dices = []
+first_turn_player = 0
+players = 2
+
+def dice_rolls(): 
+    dices = []
+    for x in range(players):
+        dices.append(random.randint(1,6))
+    return dices
+    
+dices = dice_rolls() 
+
+print("****WELCOME TO SNAKE AND LADDERS****")
+roll = input("PRESS ENTER TO ROLL")
+
+
+for i in range(1,players+1): 
+    roll = input(f"PRESS ENTER TO ROLL THE DICE")
+    print("Player",i,"Rolled",dices[i-1]) 
+    
+turn_player = 0  
+  
+def turnplayer():
+    global turn_player    
+    for j in range(0,len(dices)): 
+        if dices[j] == max(dices):
+            turn_player += j+1
+            return turn_player
+
+turn_player = turnplayer()            
+print("**The player",turn_player,"takes the first turm**") 
+
+board = []    
+for y in range(1,101): 
+    board.append(y)
+
+player_1 = board[0]
+player_2 = board[0]
+
+snake_pos = []
+ladder_pos = []
+
+for snakes in range(0,5):
+    snake_pos.append(random.randint(4,99))
+for ladders in range(0,5):
+    ladder_pos.append(random.randint(4,99))
+
+  
+def snakes(player1,player2):
+    global player_1
+    global player_2
+    for a in snake_pos :
+        if player_1 == a:
+            player_1 -= int(a/2)
+            print(f"!Player 1 landed on a snake! -- falling back to {player_1}")
+        if player_2 == a:
+            player_2 -= int(a/2)
+            print(f"!Player 2 landed on a snake! -- falling back to {player_2}")
+            
+def ladders(player1,player2):
+    global player_1,player_2
+    for ladder in ladder_pos:
+        if player1 == ladder:
+            player_1 += int(ladder/10+2)
+            print(f"Player 1 landed on a ladder -- moved up to {player_1}")
+        if player2 == ladder:
+            player_2 += int(ladder/10+2)
+            print(f"Player 2 landed on a ladder -- moved up to {player_2}")
+while True:
+    if player_1 >= board[99]:
+        print("Player 1 HAS WON!")
+        break
+    if player_2 >= board[99]:
+        print("Player 2 HAS WON!")
+        break
+    player_1 += dices[0]
+    roll = input("Player 1 -- PRESS ENTER to move")
+    ladders(player_1,player_2)
+    snakes(player_1,player_2)
+    print("Player 1 is now at",player_1)
+    
+    player_2 += dices[1]
+    roll = input("Player 2 -- PRESS ENTER to move ")
+    ladders(player_1,player_2)
+    snakes(player_1,player_2)
+    print("Player 2 is now at",player_2)        
+    dices = dice_rolls()
+    print("\nNew dice rolls are",dices)
+
